@@ -21,43 +21,62 @@ $(document).on('ready', function() {
 
     //function to display 10 GIPHYs with their ratings on the page in their respective containers.
     var tenGiphys = function() {
-        var d = $('<div>');
-        var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + clickedHappiness + "&api_key=dc6zaTOxFJmzC'&limit=10";
-
+        var clickedHappiness = $(this).attr('data-name');
+        var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + clickedHappiness + "&api_key=dc6zaTOxFJmzC&limit=10";
+        $('#happinessGiphys').empty();
 
         //     //gets data attribute and replaces all spaces with + for API search query syntax.
-        var clickedHappiness = $(this).attr('data-name'); //.replace(/ /g, "+");
+        //.replace(/ /g, "+");
         console.log("hello", clickedHappiness);
-
 
         $.ajax({
             url: queryURL,
             method: 'GET'
-        });
-
-        .done(function(response) {
+        }).done(function(response) {
             result = response.data;
+            console.log("hello", result);
 
-            //         //constructs and places GIHPYs in divs.
+            //constructs and places GIHPYs in divs.
+            for (var i = 0; i < result.length; i++) {
+                var giphyDiv = $('<div class="giphy-div">');
+                var rating = result[i].rating;
+                var ratingDiv = $('<div class="rating-div">').text('Rating: ' + rating);
+                var image = $('<img class="giphy">');
+                var giphyAnimate = result[i].images.fixed_height.url;
+
+
+                //Creates attributes for the animation of GIHPYs
+
+                image.attr('src', giphyAnimate.replace('.gif', '_s.gif'));
+                image.attr('data-still', giphyAnimate.replace('.gif', '_s.gif'));
+                image.attr('data-animate', giphyAnimate.replace('_s.gif', '.gif'));
+                image.attr('data-state', 'still');
+
+                //appends the GIPHY to the divs
+                giphyDiv.append(image);
+                giphyDiv.append(ratingDiv);
+
+                //append to pre-defined 'giphy area' on DOM
+                $('#happinessGiphys').append(giphyDiv);
+            }
 
         });
     };
 
-    //         // YOUR CODE GOES HERE!!!
-    //         // HINT: You will need to create a new div to hold the JSON.
+    $(document).on('click', '.giphy', function() {
+        var state = $(this).attr('data-state');
 
-
-
-    //     });
-
+        if (state === 'still') {
+            $(this).attr('src', $(this).data('animate'));
+            $(this).attr('data-state', 'animate');
+        } else {
+            $(this).attr('src', $(this).data('still'));
+            $(this).attr('data-state', 'still');
+        }
+    });
 
     //When a user clicks on a button, 
     $('.giphyButton').on('click', tenGiphys);
-
-
-
-
-
 
 
 });
