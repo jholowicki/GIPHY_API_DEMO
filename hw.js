@@ -22,7 +22,7 @@ $(document).on('ready', function() {
     //function to display 10 GIPHYs with their ratings on the page in their respective containers.
     var tenGiphys = function() {
         var clickedHappiness = $(this).attr('data-name');
-        var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + clickedHappiness + "&api_key=dc6zaTOxFJmzC&limit=10";
+        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + clickedHappiness + "&api_key=dc6zaTOxFJmzC&limit=10";
         $('#happinessGiphys').empty();
 
         //     //gets data attribute and replaces all spaces with + for API search query syntax.
